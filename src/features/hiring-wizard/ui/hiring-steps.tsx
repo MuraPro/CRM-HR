@@ -72,7 +72,10 @@ export const SearchCandidateStep = ({ form, candidate, error, onFieldChange }: S
 
 export const PersonalDataStep = ({ form, onFieldChange }: StepProps) => {
   const { t } = useTranslation("common");
-  const genderOptionsListId = "hiring-gender-options";
+  const genderOptions: SelectOptionType<string>[] = [
+    { label: t("hiring.genderOptions.male"), value: t("hiring.genderOptions.male") },
+    { label: t("hiring.genderOptions.female"), value: t("hiring.genderOptions.female") },
+  ];
   const familyStatusOptions: SelectOptionType<string>[] = [
     { label: t("hiring.familyStatusOptions.single"), value: t("hiring.familyStatusOptions.single") },
     { label: t("hiring.familyStatusOptions.married"), value: t("hiring.familyStatusOptions.married") },
@@ -86,16 +89,14 @@ export const PersonalDataStep = ({ form, onFieldChange }: StepProps) => {
         <Input onChange={(event) => onFieldChange("lastName", event.target.value)} placeholder={t("hiring.fields.lastName")} value={form.lastName} />
         <Input onChange={(event) => onFieldChange("middleName", event.target.value)} placeholder={t("hiring.fields.middleName")} value={form.middleName} />
         <Input onChange={(event) => onFieldChange("birthday", event.target.value)} placeholder={t("hiring.fields.birthday")} value={form.birthday} />
-        <Input
-          onChange={(event) => onFieldChange("gender", event.target.value)}
+        <Select
+          colorType="Blue"
+          isSearchable={false}
+          onChange={(option) => onFieldChange("gender", option?.value ?? "")}
+          options={genderOptions}
           placeholder={t("hiring.fields.gender")}
-          value={form.gender}
-          list={genderOptionsListId}
+          value={genderOptions.find((item) => item.value === form.gender) ?? null}
         />
-        <datalist id={genderOptionsListId}>
-          <option value={t("hiring.genderOptions.male")} />
-          <option value={t("hiring.genderOptions.female")} />
-        </datalist>
         <Input onChange={(event) => onFieldChange("phone", event.target.value)} placeholder={t("hiring.fields.phone")} value={form.phone} />
         <Input onChange={(event) => onFieldChange("email", event.target.value)} placeholder={t("hiring.fields.email")} value={form.email} />
         <Select
