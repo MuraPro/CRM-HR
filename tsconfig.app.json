@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2023",
+    "useDefineForClassFields": true,
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+
+    /* Bundler mode (Vite + esbuild / Rolldown) */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": [
+    "src/app/guards/**/*",
+    "src/app/i18n/**/*",
+    "src/app/layouts/app-layout/**/*",
+    "src/app/layouts/auth-layout/**/*",
+    "src/app/providers/store/**/*",
+    "src/shared/components/**/*",
+    "src/shared/const/input-patterns.ts",
+    "src/shared/const/storage-const.ts",
+    "src/shared/hooks/use-app-dispatch.ts",
+    "src/shared/hooks/use-app-selector.ts",
+    "src/shared/types/redux-types.ts",
+    "src/app/types/i18next.d.ts"
+  ]
+}

@@ -1,0 +1,213 @@
+@import "tailwindcss";
+@source "../../../node_modules/local-agro-ui/dist";
+
+/* @variant dark (&:where(.dark, .dark *)); */
+
+@theme {
+  --color-main-green-50: #e5fff3;
+  --color-main-green-100: #ccffe6;
+  --color-main-green-200: #99ffce;
+  --color-main-green-300: #66ffb5;
+  --color-main-green-400: #24e788;
+  --color-main-green-500: #00cd6a;
+  --color-main-green-600: #00b75e;
+  --color-main-green-700: #00994f;
+  --color-main-green-800: #006635;
+  --color-main-green-900: #00331a;
+  --color-main-green-950: #001a0d;
+
+  --color-blue-50: #e9ebfb;
+  --color-blue-100: #d4d7f7;
+  --color-blue-200: #a8b0f0;
+  --color-blue-300: #7d88e8;
+  --color-blue-400: #5260e0;
+  --color-blue-500: #3b4bdc;
+  --color-blue-600: #1f2dad;
+  --color-blue-700: #172282;
+  --color-blue-800: #0f1757;
+  --color-blue-900: #080b2b;
+  --color-blue-950: #040616;
+
+  --color-greyscale-50: #fafafa;
+  --color-greyscale-100: #f9fafb;
+  --color-greyscale-200: #f1f2f4;
+  --color-greyscale-300: #eeeff2;
+  --color-greyscale-400: #cbd5e0;
+  --color-greyscale-500: #a0aec0;
+  --color-greyscale-600: #718096;
+  --color-greyscale-700: #323b49;
+  --color-greyscale-800: #1f2937;
+  --color-greyscale-900: #111827;
+
+  --color-error-50: #fce9e9;
+  --color-error-100: #f8d3d4;
+  --color-error-200: #f2a6a9;
+  --color-error-300: #eb7a7e;
+  --color-error-400: #e44e53;
+  --color-error-500: #e03137;
+  --color-error-600: #b11b20;
+  --color-error-700: #851418;
+  --color-error-800: #590d10;
+  --color-error-900: #2c0708;
+  --color-error-950: #160304;
+
+  --color-warning-50: #fff5e5;
+  --color-warning-100: #ffebcc;
+  --color-warning-200: #ffd699;
+  --color-warning-300: #ffc266;
+  --color-warning-400: #ffad33;
+  --color-warning-500: #ffac2f;
+  --color-warning-600: #cc7a00;
+  --color-warning-700: #995c00;
+  --color-warning-800: #663d00;
+  --color-warning-900: #331f00;
+  --color-warning-950: #1a0f00;
+
+  --color-success-50: #e7fef3;
+  --color-success-100: #cffce7;
+  --color-success-200: #9ff9cf;
+  --color-success-300: #6ef7b7;
+  --color-success-400: #29e58d;
+  --color-success-500: #0aae62;
+  --color-success-600: #0bc16c;
+  --color-success-700: #089151;
+  --color-success-800: #066036;
+  --color-success-900: #03301b;
+  --color-success-950: #01180e;
+
+  --color-neon-blue-50: #e5f6ff;
+  --color-neon-blue-100: #ccecff;
+  --color-neon-blue-200: #99daff;
+  --color-neon-blue-300: #66c7ff;
+  --color-neon-blue-400: #33b4ff;
+  --color-neon-blue-500: #02a2ff;
+  --color-neon-blue-600: #0081cc;
+  --color-neon-blue-700: #006199;
+  --color-neon-blue-800: #004166;
+  --color-neon-blue-900: #002033;
+  --color-neon-blue-950: #00101a;
+
+  --color-electro-50: #ece8fc;
+  --color-electro-100: #d8d2f9;
+  --color-electro-200: #b2a5f3;
+  --color-electro-300: #8b78ed;
+  --color-electro-400: #654be7;
+  --color-electro-500: #3d1ddd;
+  --color-electro-600: #3218b4;
+  --color-electro-700: #251287;
+  --color-electro-800: #190c5a;
+  --color-electro-900: #0c062d;
+  --color-electro-950: #060317;
+
+  --font-boldExpanded: "Agrofont Bold Expanded", sans-serif;
+
+  --text-h1: 40px;
+  --text-h1--line-height: 50px;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 32px;
+  --text-h2--line-height: 40px;
+  --text-h2--font-weight: 700;
+
+  --text-h3: 24px;
+  --text-h3--line-height: 30px;
+  --text-h3--font-weight: 700;
+
+  --text-h4: 22px;
+  --text-h4--line-height: 27.5px;
+  --text-h4--font-weight: 700;
+
+  --text-h5: 18px;
+  --text-h5--line-height: 25.2px;
+  --text-h5--font-weight: 700;
+
+  --text-h6: 16px;
+  --text-h6--line-height: 140%;
+  --text-h6--font-weight: 700;
+
+  --text-x1: 18px;
+  --text-x1--line-height: 27px;
+  --text-x1--font-weight: 400;
+
+  --text-x2: 18px;
+  --text-x2--line-height: 27px;
+  --text-x2--font-weight: 500;
+
+  --text-x3: 18px;
+  --text-x3--line-height: 25.2px;
+  --text-x3--font-weight: 700;
+
+  --text-x4: 18px;
+  --text-x4--line-height: 23.4px;
+  --text-x4--font-weight: 700;
+
+  --text-l1: 16px;
+  --text-l1--line-height: 25.6px;
+  --text-l1--font-weight: 400;
+
+  --text-l2: 16px;
+  --text-l2--line-height: 24px;
+  --text-l2--font-weight: 700;
+
+  --text-l3: 16px;
+  --text-l3--line-height: 24px;
+  --text-l3--font-weight: 700;
+
+  --text-l4: 16px;
+  --text-l4--line-height: 24px;
+  --text-l4--font-weight: 500;
+
+  --text-m1: 14px;
+  --text-m1--line-height: 22.4px;
+  --text-m1--font-weight: 700;
+
+  --text-m2: 14px;
+  --text-m2--line-height: 16.6px;
+  --text-m2--font-weight: 700;
+
+  --text-m3: 14px;
+  --text-m3--line-height: 18.2px;
+  --text-m3--font-weight: 500;
+
+  --text-m4: 14px;
+  --text-m4--line-height: 22.4px;
+  --text-m4--font-weight: 400;
+
+  --text-s1: 12px;
+  --text-s1--line-height: 19.2px;
+  --text-s1--font-weight: 700;
+
+  --text-s2: 12px;
+  --text-s2--line-height: 19.2px;
+  --text-s2--font-weight: 700;
+
+  --text-s3: 12px;
+  --text-s3--line-height: 14.4px;
+  --text-s3--font-weight: 500;
+
+  --text-s4: 12px;
+  --text-s4--line-height: 16.8px;
+  --text-s4--font-weight: 400;
+
+  --text-xs1: 10px;
+  --text-xs1--line-height: 140%;
+  --text-xs1--font-weight: 400;
+
+  --text-xs2: 10px;
+  --text-xs2--line-height: 140%;
+  --text-xs2--font-weight: 500;
+
+  --text-xs3: 10px;
+  --text-xs3--line-height: 120%;
+  --text-xs3--font-weight: 700;
+
+  --spacing-sidebar: 290px;
+  --spacing-sidebarCollapsed: 90px;
+  --spacing-sidebarWithPadding: 300px;
+  --spacing-sidebarCollapsedWithPadding: 100px;
+
+  --animate-fade-in: fadeIn 2s ease-in-out;
+  --animate-floating: floating 3s ease-in-out infinite;
+}
+
+@custom-variant child (& > *);

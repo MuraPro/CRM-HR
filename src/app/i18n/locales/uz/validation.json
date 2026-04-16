@@ -1,0 +1,7 @@
+{
+  "invalidPhone": "Iltimos, to‘g‘ri telefon raqamini kiriting",
+  "invalidEmail": "Iltimos, to‘g‘ri email manzilini kiriting",
+  "invalidLink": "Iltimos, to‘g‘ri havolani kiriting",
+  "invalidAccountNumber": "20 ta raqam kiriting",
+  "invalidInnOrPnfl": "To‘g‘ri STIR yoki PNFLni kiriting"
+}

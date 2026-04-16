@@ -1,0 +1,94 @@
+@import "./tailwind-config.css";
+
+:root {
+  --sidebar-width: 256px;
+  --sidebar-collapsed-width: 80px;
+  --header-height: 96px;
+}
+
+/* Hide ScrollBar */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+@font-face {
+  font-family: "Agrofont";
+  src: url("/fonts/ALSAgrofont-Regular.ttf") format("truetype");
+  font-display: block;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Agrofont";
+  src: url("/fonts/ALSAgrofont-Medium.ttf") format("truetype");
+  font-display: block;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Agrofont";
+  src: url("/fonts/ALSAgrofont-Bold.ttf") format("truetype");
+  font-display: block;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Agrofont Bold Expanded";
+  src: url("/fonts/ALSAgrofont-BoldExpanded.ttf") format("truetype");
+  font-display: block;
+}
+
+body {
+  font-family: "Agrofont", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus-visible {
+  outline: 2px solid #3b4bdc !important;
+  outline-offset: 2px;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+button:focus,
+a:focus {
+  outline-color: #3b4bdc !important;
+}
+
+div[class$="-control"]:focus-within {
+  border-color: #3b4bdc !important;
+  box-shadow: 0 0 0 1px #3b4bdc !important;
+}
+
+.header-language-select-wrapper :focus-visible {
+  outline: none !important;
+}
+
+.header-language-select-wrapper .header-language-select__control,
+.header-language-select-wrapper .header-language-select__control:hover,
+.header-language-select-wrapper .header-language-select__control--is-focused {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.header-language-select-wrapper .header-language-select__control:focus-within {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.employees-table-wrapper [class*="min-h-[300px]"][class*="py-1"] {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.employees-table-wrapper [class*="md:gap-[100px]"] {
+  padding: 0.5rem;
+}
