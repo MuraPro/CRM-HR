@@ -195,6 +195,7 @@
   "employees.table.phone": "Телефон",
   "employees.table.status": "Статус",
   "employees.table.email": "Email",
+  "employees.actions.backToBranches": "К выбору филиала",
   "documents.title": "Документы",
   "documents.subtitle": "Документы и фильтр по типу акта",
   "documents.loading": "Загрузка документов...",

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Input, Select, Table, type ColumnDef, type SelectOptionType, Tag } from "local-agro-ui";
 
 import { useEmployees, type Employee } from "@/entities/employee";
+import { AppRoute } from "@/shared/config/routes";
 import { Icon } from "@/shared/ui/icon";
 import { PageHeader } from "@/widgets/page-header";
 import { Panel } from "@/shared/ui/panel";
@@ -124,23 +125,37 @@ export const EmployeesPage = () => {
         {filteredEmployees.length === 0 ? (
           <p className="text-sm text-greyscale-600">{t("employees.empty.filtered")}</p>
         ) : (
-          <div className="employees-table-wrapper overflow-hidden rounded-xl border border-greyscale-300">
-            <Table
-              data={paginatedEmployees}
-              columns={columns}
-              isPagination
-              page={safePage}
-              totalCount={totalCount}
-              perPage={perPage}
-              setPage={setPage}
-              setPerPage={handleSetPerPage}
-              isHeadFilled
-              isHeadRounded
-              textSize="sm"
-              colorType="Gray"
-              onRowClick={(employee) => navigate(`/employees/${employee.id}`, { state: { from: currentPath } })}
-            />
-          </div>
+          <>
+            <div className="employees-table-wrapper overflow-hidden rounded-xl border border-greyscale-300">
+              <Table
+                data={paginatedEmployees}
+                columns={columns}
+                isPagination
+                page={safePage}
+                totalCount={totalCount}
+                perPage={perPage}
+                setPage={setPage}
+                setPerPage={handleSetPerPage}
+                isHeadFilled
+                isHeadRounded
+                textSize="sm"
+                colorType="Gray"
+                onRowClick={(employee) => navigate(`/employees/${employee.id}`, { state: { from: currentPath } })}
+              />
+            </div>
+            {activeBranchId && (
+              <div className="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => navigate(AppRoute.regions)}
+                  className="group inline-flex items-center gap-2 rounded-md bg-[#3B4BDC] px-4 py-2 text-sm font-medium text-white transition hover:opacity-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B4BDC]"
+                >
+                  <Icon name="back" className="size-4 transition-transform duration-200 group-hover:-translate-x-1" />
+                  {t("employees.actions.backToBranches")}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </Panel>
     </div>

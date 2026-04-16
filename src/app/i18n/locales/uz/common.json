@@ -195,6 +195,7 @@
   "employees.table.phone": "Telefon",
   "employees.table.status": "Holat",
   "employees.table.email": "Email",
+  "employees.actions.backToBranches": "Filial tanlashga qaytish",
   "documents.title": "Hujjatlar",
   "documents.subtitle": "Hujjatlar va akt turi bo'yicha filtr",
   "documents.loading": "Hujjatlar yuklanmoqda...",

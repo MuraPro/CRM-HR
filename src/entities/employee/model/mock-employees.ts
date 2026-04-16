@@ -51,7 +51,7 @@ const EMPLOYEE_GENDERS = ["Женский", "Мужской"] as const;
 
 const EXPERIENCE_COMPANIES = ["Agrobank", "Crafers", "Artel", "Hamkor Bank", "Ipak Yoli Bank"];
 const PROJECT_NAMES = ["Агромобайл", "ДБО", "Фонд развития", "Кредитный модуль", "Payroll HR", "Risk Monitor"];
-const BRANCH_IDS = mockRegions.flatMap((region) => region.branches.map((branch) => branch.id));
+const REGION_BRANCHES = mockRegions.flatMap((region) => region.branches);
 
 const createPhone = (id: number) => {
   const middle = String(90 + (id % 9)).padStart(2, "0");
@@ -67,7 +67,7 @@ const createBirthday = (id: number) => {
   return `${day}.${month}.${year}`;
 };
 
-const createEmployee = (id: number): Employee => {
+const createEmployee = (id: number, branchId: string): Employee => {
   const name = EMPLOYEE_NAMES[(id - 1) % EMPLOYEE_NAMES.length];
   const position = EMPLOYEE_POSITIONS[(id - 1) % EMPLOYEE_POSITIONS.length];
   const status = EMPLOYEE_STATUSES[(id - 1) % EMPLOYEE_STATUSES.length];
@@ -80,7 +80,7 @@ const createEmployee = (id: number): Employee => {
 
   return {
     id: String(id),
-    branchId: BRANCH_IDS[(id - 1) % BRANCH_IDS.length] ?? "t-1",
+    branchId,
     fullName: name,
     position,
     email: `employee${String(id).padStart(2, "0")}@agrobank.uz`,
@@ -120,7 +120,12 @@ const createEmployee = (id: number): Employee => {
   };
 };
 
-export const mockEmployees: Employee[] = Array.from({ length: 40 }, (_, index) => createEmployee(index + 1));
+export const mockEmployees: Employee[] = REGION_BRANCHES.flatMap((branch, branchIndex) =>
+  Array.from({ length: branch.employees }, (_, employeeIndex) => {
+    const id = branchIndex * 10_000 + employeeIndex + 1;
+    return createEmployee(id, branch.id);
+  }),
+);
 
 export const addMockEmployee = (employee: Employee) => {
   mockEmployees.push(employee);
