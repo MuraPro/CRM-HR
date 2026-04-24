@@ -17,7 +17,7 @@ export const primaryNavigationSections: NavigationSection[] = [
     titleKey: "sidebar.sections.main",
     items: [
       { labelKey: "sidebar.main", path: AppRoute.dashboard, icon: "dashboard" },
-      { labelKey: "sidebar.employees", path: AppRoute.regions, icon: "users" },
+      { labelKey: "sidebar.employees", path: AppRoute.employees, icon: "users" },
       { labelKey: "sidebar.attendance", path: AppRoute.attendance, icon: "calendar" },
       { labelKey: "sidebar.documents", path: AppRoute.documents, icon: "file" },
       { labelKey: "sidebar.reports", icon: "report" },

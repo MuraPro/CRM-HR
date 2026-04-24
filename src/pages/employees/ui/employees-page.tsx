@@ -1,164 +1,135 @@
-import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-
-import { Input, Select, Table, type ColumnDef, type SelectOptionType, Tag } from "local-agro-ui";
-
-import { useEmployees, type Employee } from "@/entities/employee";
-import { AppRoute } from "@/shared/config/routes";
-import { Icon } from "@/shared/ui/icon";
 import { PageHeader } from "@/widgets/page-header";
-import { Panel } from "@/shared/ui/panel";
+import { useMemo } from "react";
 
-import { useEmployeeFilters } from "../model/use-employee-filters";
-
-type StatusFilter = "ALL" | "Активный" | "Уволен" | "В отпуске";
-
-const statusLabelKeyByValue: Record<Exclude<StatusFilter, "ALL">, string> = {
-  "Активный": "status.active",
-  "Уволен": "status.dismissed",
-  "В отпуске": "status.vacation",
-};
-
-const statusColorByValue: Record<Exclude<StatusFilter, "ALL">, "Green" | "Blue" | "Red"> = {
-  "Активный": "Green",
-  "В отпуске": "Blue",
-  "Уволен": "Red",
-};
+import { EmployeesFiltersPanel } from "../components/employees-filters-panel";
+import { EmployeesPageSkeleton } from "../components/employees-page-skeleton";
+import { EmployeesTable } from "../components/employees-table";
+import {
+  useComplexesQuery,
+  useDepartmentsQuery,
+  useDivisionsQuery,
+  useEmployeesByFiltersQuery,
+  useFilialsQuery,
+  useRegionsQuery,
+  useTeamsQuery,
+} from "../hooks/use-employees-hierarchy-queries";
+import { useEmployeesFilters } from "../hooks/use-employees-filters";
 
 export const EmployeesPage = () => {
-  const { t } = useTranslation("common");
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { data, isLoading, isError } = useEmployees();
-  const [page, setPage] = useState(1);
-  const perPage = 10;
-  const employees = data ?? [];
-  const activeBranchId = useMemo(() => new URLSearchParams(location.search).get("branchId") ?? "", [location.search]);
-  const employeesInBranch = useMemo(
-    () => (activeBranchId ? employees.filter((employee) => employee.branchId === activeBranchId) : employees),
-    [activeBranchId, employees],
+  const {
+    filters,
+    setComplex,
+    setDepartment,
+    setDivision,
+    setFilial,
+    setPage,
+    setRegion,
+    setTeam,
+  } = useEmployeesFilters();
+  const isHeadOffice = filters.regionId === "head-office";
+  const isNonHeadRegionSelected = Boolean(filters.regionId) && !isHeadOffice;
+
+  const regionsQuery = useRegionsQuery();
+  const filialsQuery = useFilialsQuery(filters.regionId, Boolean(filters.regionId) && !isHeadOffice);
+  const complexesQuery = useComplexesQuery({
+    regionId: filters.regionId,
+    filialId: filters.filialId,
+    enabled: Boolean(filters.regionId) && (isHeadOffice || Boolean(filters.filialId)),
+  });
+  const departmentsQuery = useDepartmentsQuery({
+    regionId: filters.regionId,
+    filialId: filters.filialId,
+    complexId: filters.complexId,
+    enabled: Boolean(filters.complexId),
+  });
+  const divisionsQuery = useDivisionsQuery({
+    regionId: filters.regionId,
+    filialId: filters.filialId,
+    complexId: filters.complexId,
+    departmentId: filters.departmentId,
+    enabled: Boolean(filters.departmentId) && isHeadOffice,
+  });
+  const teamsQuery = useTeamsQuery({
+    regionId: filters.regionId,
+    filialId: filters.filialId,
+    complexId: filters.complexId,
+    departmentId: filters.departmentId,
+    divisionId: filters.divisionId,
+    enabled: Boolean(filters.departmentId),
+  });
+
+  const queryFilters = useMemo(
+    () => ({
+      ...filters,
+    }),
+    [filters],
   );
-  const { filteredEmployees, search, setSearch, setStatus, status } = useEmployeeFilters(employeesInBranch);
-  const statusOptions: SelectOptionType<StatusFilter>[] = [
-    { label: t("employees.filters.status.all"), value: "ALL" },
-    { label: t("status.active"), value: "Активный" },
-    { label: t("status.dismissed"), value: "Уволен" },
-    { label: t("status.vacation"), value: "В отпуске" },
-  ];
-  const selectedStatusOption = statusOptions.find((option) => option.value === status);
+  const employeesQuery = useEmployeesByFiltersQuery(queryFilters);
 
-  const columns = useMemo<ColumnDef<Employee>[]>(
-    () => [
-      {
-        accessorKey: "fullName",
-        header: t("employees.table.fullName"),
-      },
-      {
-        accessorKey: "position",
-        header: t("employees.table.position"),
-      },
-      {
-        accessorKey: "email",
-        header: t("employees.table.email"),
-      },
-      {
-        accessorKey: "phone",
-        header: t("employees.table.phone"),
-      },
-      {
-        accessorKey: "status",
-        header: t("employees.table.status"),
-        cell: ({ row }) => (
-          <Tag colorType={statusColorByValue[row.original.status]}>{t(statusLabelKeyByValue[row.original.status])}</Tag>
-        ),
-      },
-    ],
-    [t],
-  );
+  const isPageLoading = regionsQuery.isLoading;
+  const rows = employeesQuery.data?.rows ?? [];
+  const totalCount = employeesQuery.data?.total ?? 0;
+  const shouldShowEmptyState = !employeesQuery.isLoading && rows.length === 0;
 
-  const totalCount = filteredEmployees.length;
-  const pageCount = perPage > 0 ? Math.ceil(totalCount / perPage) : 0;
-  const safePage = pageCount === 0 ? 1 : Math.min(Math.max(page, 1), pageCount);
-  const handleSetPerPage: Dispatch<SetStateAction<number>> = () => undefined;
-  const paginatedEmployees = useMemo(() => {
-    if (totalCount === 0) {
-      return [];
-    }
-
-    const startIndex = (safePage - 1) * perPage;
-    return filteredEmployees.slice(startIndex, startIndex + perPage);
-  }, [filteredEmployees, perPage, safePage, totalCount]);
-  const currentPath = `${location.pathname}${location.search}`;
-
-  if (isLoading) return <p className="p-4">{t("employees.loading")}</p>;
-  if (isError) return <p className="p-4 text-error-500">{t("employees.error.loadFailed")}</p>;
+  if (isPageLoading) {
+    return (
+      <div className="space-y-4">
+        <PageHeader title="Сотрудники" subtitle="Иерархическая структура и штатное расписание" />
+        <EmployeesPageSkeleton />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
-      <PageHeader subtitle={t("employees.subtitle")} title={t("employees.title")} />
-      <Panel>
-        <div className="mb-4 grid grid-cols-3 gap-4">
-          <Input
-            leftIcon={<Icon name="search" />}
-            onChange={(event) => {
-              setSearch(event.target.value);
-              setPage(1);
-            }}
-            placeholder={t("employees.filters.searchPlaceholder")}
-            value={search}
-          />
-          <Select
-            colorType="Blue"
-            isSearchable={false}
-            noOptionsMessage={t("employees.filters.status.noOptions")}
-            onChange={(option) => {
-              setStatus(option?.value ?? "ALL");
-              setPage(1);
-            }}
-            options={statusOptions}
-            placeholder={t("employees.filters.status.placeholder")}
-            value={selectedStatusOption}
-          />
-        </div>
+      <PageHeader title="Сотрудники" subtitle="Иерархическая структура и штатное расписание" />
+      <div className="grid grid-cols-[320px_1fr] gap-4">
+        <EmployeesFiltersPanel
+          filters={filters}
+          regionOptions={regionsQuery.data ?? []}
+          filialOptions={filialsQuery.data ?? []}
+          complexOptions={complexesQuery.data ?? []}
+          departmentOptions={departmentsQuery.data ?? []}
+          divisionOptions={divisionsQuery.data ?? []}
+          teamOptions={teamsQuery.data ?? []}
+          isLoading={regionsQuery.isLoading}
+          isFilialDisabled={!filters.regionId || isHeadOffice}
+          isComplexDisabled={!filters.regionId || (!isHeadOffice && !filters.filialId)}
+          isDepartmentDisabled={!filters.complexId}
+          isDivisionDisabled={isNonHeadRegionSelected || !filters.departmentId}
+          isTeamDisabled={isHeadOffice ? !filters.divisionId : !filters.departmentId}
+          onRegionChange={setRegion}
+          onFilialChange={setFilial}
+          onComplexChange={setComplex}
+          onDepartmentChange={setDepartment}
+          onDivisionChange={setDivision}
+          onTeamChange={setTeam}
+        />
 
-        {filteredEmployees.length === 0 ? (
-          <p className="text-sm text-greyscale-600">{t("employees.empty.filtered")}</p>
-        ) : (
-          <>
-            <div className="employees-table-wrapper overflow-hidden rounded-xl border border-greyscale-300">
-              <Table
-                data={paginatedEmployees}
-                columns={columns}
-                isPagination
-                page={safePage}
-                totalCount={totalCount}
-                perPage={perPage}
-                setPage={setPage}
-                setPerPage={handleSetPerPage}
-                isHeadFilled
-                isHeadRounded
-                textSize="sm"
-                colorType="Gray"
-                onRowClick={(employee) => navigate(`/employees/${employee.id}`, { state: { from: currentPath } })}
-              />
+        <div>
+          {employeesQuery.isLoading ? (
+            <div className="animate-pulse rounded-2xl border border-greyscale-200 bg-white p-4">
+              {Array.from({ length: 9 }, (_, index) => (
+                <div key={index} className="mb-3 h-10 rounded bg-greyscale-200" />
+              ))}
             </div>
-            {activeBranchId && (
-              <div className="mt-4 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => navigate(AppRoute.regions)}
-                  className="group inline-flex items-center gap-2 rounded-md bg-[#3B4BDC] px-4 py-2 text-sm font-medium text-white transition hover:opacity-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B4BDC]"
-                >
-                  <Icon name="back" className="size-4 transition-transform duration-200 group-hover:-translate-x-1" />
-                  {t("employees.actions.backToBranches")}
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </Panel>
+          ) : null}
+
+          {shouldShowEmptyState ? (
+            <div className="rounded-2xl border border-greyscale-200 bg-white p-6 text-sm text-greyscale-600">
+              Выберите фильтры для отображения сотрудников.
+            </div>
+          ) : (
+            <EmployeesTable
+              rows={rows}
+              totalCount={totalCount}
+              page={filters.page}
+              perPage={filters.perPage}
+              setPage={setPage}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
-
